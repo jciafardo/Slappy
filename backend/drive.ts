@@ -1,7 +1,7 @@
 import { google, drive_v3 } from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
 
-async function getFileContent(authClient: OAuth2Client, fileId: string): Promise<void> {
+async function getFileContent(authClient: OAuth2Client, fileId: string): Promise<object> {
   const drive = google.drive({ version: 'v3', auth: authClient });
 
   try {
@@ -13,8 +13,10 @@ async function getFileContent(authClient: OAuth2Client, fileId: string): Promise
 
     // Print the file content
     console.log('File Content:\n', response.data);
+    return response.data;
   } catch (error) {
     console.error('Error retrieving file content:', error);
+    return {};
   }
 }
 

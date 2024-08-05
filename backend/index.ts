@@ -1,11 +1,18 @@
 import AUTHORIZE from './authenticate';
-import GET_FILES from './drive';
+import  startServer from './controller/server'
 
-const fileId: string = '1kVhipG5toxecytfgJexRX_4ssvz6XldW';
 
+
+// Initialize authorization then start server
 AUTHORIZE()
-  .then((authClient) => GET_FILES(authClient, fileId))
-  .catch(console.error);
+  .then(() => {
+    console.log('Authorization successful.')
+    startServer();
+  })
+  .catch(error => {
+    console.error('Authorization failed:', error);
+  });
+
 
 
 
