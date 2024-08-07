@@ -13,13 +13,13 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             // Handle error
             console.error('Error fetching data:', error);
-            return {"Error": "Error fetching data"}; // Return an empty object on error
+            return {"There was an error retriving data": "Error fetching data"}; // Return an empty object on error
         }
     }
 
     async function displayCopiedText() {
         const listElement = document.getElementById('copied-text-list'); // Get the placeholder element
-
+        const errorMsg = 'There was an error retriving data'
         // Clear any existing content
         listElement.innerHTML = '';
 
@@ -35,8 +35,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const copyIcon = document.createElement('img');
             copyIcon.setAttribute('src', './icons/copy.svg'); // Set the source of the image
             
-            listItem.appendChild(copyIcon); // Add the icon to the list item
+            
             listElement.appendChild(listItem); // Add the list item to the placeholder
+            if(listItem.textContent != errorMsg){
+            listItem.appendChild(copyIcon); // Add the icon to the list item
+            }
         });
 
         // Add event listeners to copy icons
