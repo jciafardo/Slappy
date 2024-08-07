@@ -13,9 +13,7 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <h2>Your Copied Text</h2>
-        <ol>
-            <li data-text="Password ">Password 1 <img src="icons/copy.svg" alt="Copy" class="copied-text"></li>
-            <li data-text="Username">Username <img src="icons/copy.svg" alt="Copy" class="copied-text"></li>
+        <ol id="copied-text-list">
         </ol>
          <!-- Feedback message -->
         <div id="feedback" class="feedback">copied to clipboard!</div>
@@ -33,7 +31,7 @@
         <p>This is a sample page with a banner and a side menu. Feel free to customize the content and styles as needed.</p>
     </div>
 
-   
-    <script src="javascript/copy_handler.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script type="module" src="javascript/copy_handler.js"></script>
 </body>
 </html>

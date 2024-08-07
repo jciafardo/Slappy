@@ -1,21 +1,21 @@
 import express, { Request, Response } from 'express';
 import AUTHORIZE from '../authenticate';
-import GET_FILES from '../drive';
+import getFileContent from '../drive';
+import cors from 'cors';
 
-const fileId: string = '1kVhipG5toxecytfgJexRX_4ssvz6XldW';
+const fileId: string = '1p9T55mjdkDm7nW9PbjzeykVAhzKvGZkW';
 
 const app = express();
 const port = 3000;
 
 // Middleware to parse JSON bodies
-app.use(express.json());
+app.use(cors());
 
 // Define an API endpoint
-app.get('/getAllCopiedText', (req: Request, res: Response) => {
-  const responseData = {
-    "start": "end"
-  };
-  res.json(responseData);
+app.get('/getAllCopiedText', async (req: Request, res: Response) => {
+  const oauthClient = await AUTHORIZE();
+  const fileContent = await getFileContent(oauthClient, fileId)
+  res.json(fileContent);
 });
 
 // Start the server

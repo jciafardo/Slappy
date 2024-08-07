@@ -44,6 +44,11 @@ body {
     
 }
 
+.sidebar img {
+    padding-left: 10px;
+    
+}
+
 .sidebar li:hover {
     background-color: #575757;
 }

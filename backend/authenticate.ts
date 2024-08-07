@@ -70,7 +70,7 @@ async function authorize(): Promise<OAuth2Client> {
   if (client.credentials) {
     await saveCredentials(client);
   }
-  return client;
+  return client
 }
 
 export default authorize;
