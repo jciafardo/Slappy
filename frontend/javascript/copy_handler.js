@@ -13,21 +13,41 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             // Handle error
             console.error('Error fetching data:', error);
-            return {"There was an error retriving data": "Error fetching data"}; // Return an empty object on error
+            return {"dataErrorMessage": "There is a problem with our servers we are working to fix this"}; // Return an empty object on error
         }
     }
 
     async function displayCopiedText() {
         const listElement = document.getElementById('copied-text-list'); // Get the placeholder element
-        const errorMsg = 'There was an error retriving data'
+         
+        
         // Clear any existing content
         listElement.innerHTML = '';
 
         // Get the copied text JSON object
         const copiedTextObject = await getCopiedText(); // Await the asynchronous function
+        const entries = Object.entries(copiedTextObject);
+        if (copiedTextObject.hasOwnProperty('fileReadingError')) {
+            const listItem = document.createElement('li');
+            listItem.textContent = copiedTextObject['fileReadingError']
+            listElement.appendChild(listItem)
+          } 
 
+        else if (copiedTextObject.hasOwnProperty('dataErrorMessage')){
+            const listItem = document.createElement('li');
+            listItem.textContent = copiedTextObject['dataErrorMessage']
+            listElement.appendChild(listItem)
+        }
+
+        // check if there is any text user has copied 
+        else if(entries.length < 1){
+            const listItem = document.createElement('li');
+            listItem.textContent = "You have not copied any text yet."
+            listElement.appendChild(listItem)
+        }
+        else{
         // Iterate over the key-value pairs of the JSON object and create list items
-        Object.entries(copiedTextObject).forEach(([key, value]) => {
+       entries.forEach(([key, value]) => {
             const listItem = document.createElement('li'); // Create a new list item
             listItem.textContent = key; // Set the text content
             listItem.setAttribute("data-text", value);
@@ -37,10 +57,12 @@ document.addEventListener('DOMContentLoaded', () => {
             
             
             listElement.appendChild(listItem); // Add the list item to the placeholder
-            if(listItem.textContent != errorMsg){
+            
             listItem.appendChild(copyIcon); // Add the icon to the list item
-            }
-        });
+            
+        
+        })
+    };
 
         // Add event listeners to copy icons
         document.querySelectorAll('#copied-text-list img').forEach(img => {

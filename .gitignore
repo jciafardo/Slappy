@@ -4,3 +4,5 @@ node_modules/
 # ignore authentication files 
 authentication/
 
+# ignore notes 
+notes/
