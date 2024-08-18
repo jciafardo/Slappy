@@ -88,5 +88,41 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+      // Declare addText function globally
+      window.addText = function(event) {
+        createFileAndFolder()
+       
+        event.preventDefault();
+        const label = document.getElementById('label').value;
+        const value = document.getElementById('value').value;
+        alert("Label: " + label + "\nValue: " + value);
+    };
+
+    async function createFileAndFolder(){
+        const createFolderApiUrl = 'http://localhost:3000/createFileAndFolder'
+
+        try {
+            const response = await axios.get(createFolderApiUrl);
+            // Handle success
+            console.log('Data:', response.data); // This is your JSON object
+            return response.data;
+        } catch (error) {
+            // Handle error
+            console.error('Error fetching data:', error);
+            return {"dataErrorMessage": "There is a problem with our servers we are working to fix this"}; // Return an empty object on error
+        }
+
+    }
+
+    async function createFile(){
+        
+    }
+
+    
+
+
+
     displayCopiedText();
+    
+
 });

@@ -5,9 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
     <title>Slappy</title>
-    <style>
-        
-    </style>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script type="module" src="javascript/copy_handler.js"></script>
 </head>
 <body>
     <!-- Sidebar -->
@@ -17,6 +16,16 @@
         </ol>
          <!-- Feedback message -->
         <div id="feedback" class="feedback">copied to clipboard!</div>
+
+        <form onsubmit="addText(event)">
+            <label for="label">Label:</label>
+            <input type="text" id="label" name="label">
+
+            <label for="value">Value:</label>
+            <input type="text" id="value" name="value">
+
+            <button type="submit">Add</button>
+        </form>
     </div>
 
     <!-- Main content -->
@@ -31,7 +40,7 @@
         <p>This is a sample page with a banner and a side menu. Feel free to customize the content and styles as needed.</p>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script type="module" src="javascript/copy_handler.js"></script>
+    
+    
 </body>
 </html>
