@@ -89,20 +89,48 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
       // Declare addText function globally
-      window.addText = function(event) {
-        createFileAndFolder()
-       
-        event.preventDefault();
+      window.addText = async function(event) {
+        event.preventDefault(); // Prevent the default form submission behavior
+    
         const label = document.getElementById('label').value;
         const value = document.getElementById('value').value;
-        alert("Label: " + label + "\nValue: " + value);
+    
+        try {
+            // Create file and folder if they don't exist, otherwise return their IDs
+            await createFileAndFolder();
+    
+            const addTextApiUrl = `http://localhost:3000/addCopiedText`;
+    
+            // Make the request to the API using axios
+            const response = await axios.put(addTextApiUrl, {
+                label: label,
+                value: value
+            }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+    
+            if (response.status === 200) {
+                console.log('API Response:', response.data);
+                alert(`Label: ${label}\nValue: ${value}`);
+            } else {
+                console.error('API request failed:', response.statusText);
+                alert('Failed to add text. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error during processing:', error);
+            alert('An error occurred while processing your request.');
+        }
     };
+    
+    
 
     async function createFileAndFolder(){
         const createFolderApiUrl = 'http://localhost:3000/createFileAndFolder'
 
         try {
-            const response = await axios.get(createFolderApiUrl);
+            const response = await axios.post(createFolderApiUrl);
             // Handle success
             console.log('Data:', response.data); // This is your JSON object
             return response.data;
@@ -114,9 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     }
 
-    async function createFile(){
-        
-    }
+   
 
     
 

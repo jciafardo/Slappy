@@ -1,6 +1,6 @@
 import { google, drive_v3 } from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
-import AUTHORIZE from './authenticate';
+
 
 export async function getFileContent(authClient: OAuth2Client, fileId: string): Promise<object> {
   const drive = google.drive({ version: 'v3', auth: authClient });
@@ -25,9 +25,39 @@ export async function getFileContent(authClient: OAuth2Client, fileId: string): 
   }
 }
 
-async function writeFileContent(){
+export async function writeFileContent(authClient: OAuth2Client, fileId: string, textLabel: string, textValue: string){
+    const drive = google.drive({ version: 'v3', auth: authClient });
   
+    try {
+      // Retrieve the existing content of the file
+      const fileResponse = await drive.files.get({
+        fileId: fileId,
+        alt: 'media',
+      });
+  
+      const existingContent = fileResponse.data as string;
+  
+      // Append the new content to the existing content
+      const newContent = `${existingContent}\n${textLabel}: ${textValue}`;
+  
+      // Update the file with the new content
+      const media = {
+        mimeType: 'text/plain',
+        body: newContent,
+      };
+  
+      const updateResponse = await drive.files.update({
+        fileId: fileId,
+        media: media,
+      });
+  
+      console.log('File content updated successfully', updateResponse.status);
+    } catch (error) {
+      console.error('Error updating file content:', error);
+      throw error;
+    }
 }
+
 
 export async function createFile(authClient: OAuth2Client, parentFolderId: string): Promise<string> {
   const drive = google.drive({ version: 'v3', auth: authClient });
