@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import AUTHORIZE from '../authenticate';
-import {getFileContent, createFolder, createFile, writeFileContent} from '../drive';
+import {getFileContent, createFolder, createFile, writeFileContent, clearFileContent} from '../drive';
 import cors from 'cors';
 
 
@@ -54,6 +54,14 @@ app.put('/addCopiedText', async (req: Request, res: Response) => {
     res.status(500).json({ error: 'An error occurred while processing your request.' });
   }
 });
+
+app.put('/deleteCopiedText'), async (req: Request, res: Response) => {
+  const oauthClient = await AUTHORIZE();
+  const folderId = await createFolder(oauthClient)
+  const fileId = await createFile(oauthClient, folderId)
+  await clearFileContent(oauthClient, fileId)
+  res.json(fileId);
+}
 
 
 

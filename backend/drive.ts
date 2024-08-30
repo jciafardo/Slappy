@@ -20,43 +20,94 @@ export async function getFileContent(authClient: OAuth2Client, fileId: string): 
   } catch (error) {
     // add a check if we have a folder named slappy
     
-    console.error('Error retrieving file content:', error);
+    await clearFileContent(authClient, fileId)
     return JSON.parse('{"fileReadingError": "Cannot read text from file... copy some text to create a fresh slappy"}');
   }
 }
 
-export async function writeFileContent(authClient: OAuth2Client, fileId: string, textLabel: string, textValue: string){
-    const drive = google.drive({ version: 'v3', auth: authClient });
-  
+export async function writeFileContent(authClient: OAuth2Client, fileId: string, textLabel: string, textValue: string) {
+  const drive = google.drive({ version: 'v3', auth: authClient });
+
+  try {
+    // Retrieve the existing content of the file
+    const fileResponse = await drive.files.get({
+      fileId: fileId,
+      alt: 'media',
+    }, { responseType: 'text' });
+
+    let existingContent: Record<string, any> = {};
+
     try {
-      // Retrieve the existing content of the file
-      const fileResponse = await drive.files.get({
-        fileId: fileId,
-        alt: 'media',
-      });
-  
-      const existingContent = fileResponse.data as string;
-  
-      // Append the new content to the existing content
-      const newContent = `${existingContent}\n${textLabel}: ${textValue}`;
-  
-      // Update the file with the new content
-      const media = {
-        mimeType: 'text/plain',
-        body: newContent,
-      };
-  
-      const updateResponse = await drive.files.update({
-        fileId: fileId,
-        media: media,
-      });
-  
-      console.log('File content updated successfully', updateResponse.status);
-    } catch (error) {
-      console.error('Error updating file content:', error);
-      throw error;
+      // Parse existing content as JSON
+      existingContent = JSON.parse(fileResponse.data as string);
+    } catch {
+      // If parsing fails, assume content is not valid JSON and clear the file
+      console.warn('Existing content is not valid JSON, clearing file content.');
+      await clearFileContent(authClient, fileId);
+
+      // Initialize existing content as an empty object
+      existingContent = {};
     }
+
+    // Update the JSON object with the new data
+    existingContent[textLabel] = textValue;
+
+    // Convert the updated JSON object to a string
+    const newContent = JSON.stringify(existingContent, null, 2);
+
+    // Update the file with the new JSON content
+    const media = {
+      mimeType: 'application/json',
+      body: newContent,
+    };
+
+    const updateResponse = await drive.files.update({
+      fileId: fileId,
+      media: media,
+    });
+
+    console.log('File content updated successfully', updateResponse.status);
+  } catch (error) {
+    console.error('Error updating file content:', error);
+    throw error;
+  }
 }
+
+export async function clearFileContent(authClient: OAuth2Client, fileId: string){
+  console.log('clearFileContent')
+  const drive = google.drive({ version: 'v3', auth: authClient });
+
+  try {
+    // Retrieve the existing content of the file
+    const fileResponse = await drive.files.get({
+      fileId: fileId,
+      alt: 'media',
+    });
+
+    
+
+    // Append the new content to the existing content
+    const newContent = " ";
+
+    // Update the file with the new content
+    const media = {
+      mimeType: 'text/plain',
+      body: newContent,
+    };
+
+    const updateResponse = await drive.files.update({
+      fileId: fileId,
+      media: media,
+    });
+
+    console.log('File content updatffed successfully', updateResponse.status);
+  } catch (error) {
+    console.error('Error updating file content:', error);
+    throw error;
+  }
+}
+
+
 
 
 export async function createFile(authClient: OAuth2Client, parentFolderId: string): Promise<string> {

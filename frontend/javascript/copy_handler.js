@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
             if (response.status === 200) {
                 console.log('API Response:', response.data);
-                alert(`Label: ${label}\nValue: ${value}`);
+                location.reload();
             } else {
                 console.error('API request failed:', response.statusText);
                 alert('Failed to add text. Please try again.');
@@ -123,6 +123,27 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('An error occurred while processing your request.');
         }
     };
+
+    window.deleteText = async function() {
+        const deleteTextApiUrl = 'http://localhost:3000/deleteCopiedText';
+    
+        try {
+            // Make the request to the API using axios
+            const response = await axios.put(deleteTextApiUrl);
+    
+            if (response.status === 200) {
+                console.log('API Response:', response.data);
+                location.reload(); // Reload the page to reflect changes
+            } else {
+                console.error('API request failed:', response.statusText);
+                alert('Failed to delete text. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error during processing:', error);
+            alert('An error occurred while processing your request.');
+        }
+    };
+      
     
     
 
@@ -141,12 +162,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
     }
-
-   
-
-    
-
-
 
     displayCopiedText();
     
