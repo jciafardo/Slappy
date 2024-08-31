@@ -55,13 +55,18 @@ app.put('/addCopiedText', async (req: Request, res: Response) => {
   }
 });
 
-app.put('/deleteCopiedText'), async (req: Request, res: Response) => {
-  const oauthClient = await AUTHORIZE();
-  const folderId = await createFolder(oauthClient)
-  const fileId = await createFile(oauthClient, folderId)
-  await clearFileContent(oauthClient, fileId)
-  res.json(fileId);
-}
+app.put('/deleteCopiedText', async (req: Request, res: Response) => {
+  try {
+    const oauthClient = await AUTHORIZE();
+    const folderId = await createFolder(oauthClient);
+    const fileId = await createFile(oauthClient, folderId);
+    await clearFileContent(oauthClient, fileId);
+    res.json({ message: 'File content cleared successfully', folderId, fileId });
+  } catch (error) {
+    console.error('Error during processing:', error);
+    res.status(500).json({ error: 'An error occurred while processing your request.' });
+  }
+});
 
 
 
