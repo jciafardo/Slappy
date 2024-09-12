@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
     <title>Slappy</title>
+    
+    
+    
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="module" src="javascript/copy_handler.js"></script>
 </head>
@@ -19,10 +22,10 @@
 
         <form onsubmit="addText(event)">
             <label for="label">Label:</label>
-            <input type="text" id="label" name="label">
+            <input type="text" id="label" name="label" class="styled-input">
 
             <label for="value">Value:</label>
-            <input type="text" id="value" name="value">
+            <input type="text" id="value" name="value" class="styled-input">
 
             <button type="submit">Add</button>
         </form>
@@ -42,8 +45,5 @@
         <h1>Welcome to Slappy!</h1>
         <p>This is a sample page with a banner and a side menu. Feel free to customize the content and styles as needed.</p>
     </div>
-
-    
-    
 </body>
 </html>
